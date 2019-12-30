@@ -1,0 +1,43 @@
+﻿<Window x:Class="requestCreator.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:requestCreator"
+        mc:Ignorable="d"
+        Title="Settings" Height="250.5" Width="541">
+    <Grid>
+        <TabControl Margin="0,0,0,45">
+            <TabItem Header="Общие">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <!-- Labels -->
+                        <Label Margin="10,10,0,0" Content="Фамилия И. О." Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150"/>
+                        <Label Margin="0,10,85,0" Content="Телефон" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="95"/>
+                        <Label Margin="10,45,0,0" Content="Группа" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150"/>
+                        <Label Margin="10,80,0,0" Content="Путь по умолчанию" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150"/>
+
+                        <!-- Inputs -->
+                        <TextBox x:Name="tbUser" Height="25" Margin="160,10,190,0" TextWrapping="Wrap" Text="FIO" VerticalAlignment="Top"/>
+                        <TextBox x:Name="tbPhone" HorizontalAlignment="Right" Height="25" Margin="0,10,10,0" TextWrapping="Wrap" Text="Phone" VerticalAlignment="Top" Width="70"/>
+                        <ComboBox x:Name="cmbGroup" Height="25" Margin="160,45,10,0" VerticalAlignment="Top">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBox x:Name="tbPath" Height="25" Margin="160,80,10,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top"/>
+                        <Button x:Name="btnFolder" Content="Выбор папки для сохранения" Margin="160,115,10,0" Click="BtnFolder_Click" Height="25" VerticalAlignment="Top"/>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Интерфейс">
+
+            </TabItem>
+        </TabControl>
+
+        <Button x:Name="OkBtn" Content="ОК" Margin="0, 0, 100, 10" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OkBtn_Click"/>
+        <Button x:Name="CancelBtn" Content="Отмена" Margin="0, 0, 10, 10" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="CancelBtn_Click"/>
+    </Grid>
+</Window>

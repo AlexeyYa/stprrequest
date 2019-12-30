@@ -1,0 +1,169 @@
+﻿<Window x:Class="requestCreator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:requestCreator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid Margin="0,0,0,5">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition MinHeight="100" Height="4*"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition MinHeight="30" Height="*"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
+        </Grid.RowDefinitions>
+        
+        <DockPanel Height="20" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4">
+            <Menu DockPanel.Dock="Top">
+                <!-- Dropdown menu displays to the left on tablet PC, to fix change handedness in windows settings. Not a bug -->
+                <MenuItem Header="_Файл">
+                    <MenuItem Header="_Открыть"/>
+                    <MenuItem Header="_Настройки" Click="MenuItemSettings_Click"/>
+                    <MenuItem Header="В_ыход"/>
+                </MenuItem>
+                <MenuItem Header="_Справка">
+                    <MenuItem Header="_Инструкция"/>
+                    <MenuItem Header="_О программе"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <DataGrid x:Name="dGrid" Drop="DGrid_Drop" AllowDrop="True" ItemsSource="{Binding Data}"
+                  CanUserAddRows="False" AutoGenerateColumns="False" RowDetailsVisibilityMode="Collapsed"
+                  Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Том" Binding="{Binding DocCode}"/>
+                <DataGridTemplateColumn Header="Форматы">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Size}"/>
+                                <Button Click="ClearSize" Grid.Column="1">-</Button>
+                                <Button Click="EditSize" Grid.Column="2">+</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Форматы кор.">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding SizeCor}"/>
+                                <Button Click="ClearSizeCor" Grid.Column="1">-</Button>
+                                <Button Click="EditSizeCor" Grid.Column="2">+</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Кнопк">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="ShowHideDetails" Grid.Column="1">+</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding User}"/>
+                        <TextBlock Text="{Binding Phone}" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+
+        <TextBlock Text="Объект" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="1"/>
+        <ComboBox x:Name="cmbObject" SelectedItem="{Binding Object}"
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="1">
+        </ComboBox>
+        <Button x:Name="BtnTasks" Content="Форма готового материала" Click="BtnTasks_Click"
+               Margin="10,5,10,5" Grid.Column="2" Grid.Row="1"/>
+        <Button x:Name="CorrectionsBtn" Content="Корректировки" Click="CorrectionsBtn_Click"
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="1"/>
+
+        <TextBlock Text="Срок выполнения заявки:" VerticalAlignment="Center"  
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="2"/>
+        <!--<DatePicker x:Name="dtEndDate" SelectedDate="{Binding EndDate}"
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="2"/>-->
+        <TextBox Text="{Binding EndDate}" TextAlignment="Right"
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="2"/>
+        <TextBlock Text="Субподрядчик:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="2" Grid.Row="2"/>
+        <ComboBox x:Name="cmbSub" SelectedItem="{Binding Subs}"
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="2">
+        </ComboBox>
+
+        <Button Content="Добавить том"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="3"/>
+        <Button Content="Добавить из файла/папки"
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="3"/>
+
+        <TextBlock Text="Количество оригиналов:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="5"/>
+        <TextBox x:Name="tbOrig" Text="{Binding NumberOfOriginals}" 
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="5"/>
+        <TextBlock Text="Количество копий:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="2" Grid.Row="5"/>
+        <TextBox x:Name="tbCopy" Text="{Binding NumberOfCopies}" 
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="5"/>
+
+
+        <Separator 
+            Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6"/>
+
+        <TextBox x:Name="tbComments" Text="{Binding Comments}" TextWrapping="Wrap"
+                 Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="7"/>
+
+        <TextBox x:Name="tbFolder" TextWrapping="Wrap" Text="{Binding SavePath}" 
+                Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="8"/>
+        <Button x:Name="btnFolder" Content="Выбор папки для сохранения" Click="BtnFolder_Click"
+                Margin="10,5,10,5" Grid.Column="3" Grid.Row="8"/>
+
+        <TextBlock Text="Причина выпуска:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="9"/>
+        <ComboBox x:Name="cmbPublish" SelectedItem="{Binding PublishType}"
+            Margin="10,5,10,5" Grid.Column="1" Grid.Row="9">
+        </ComboBox>
+        <CheckBox x:Name="cbChildFolders" Content="Считать вложенные папки" VerticalAlignment="Center"
+                Margin="10,5,10,5" Grid.Column="2" Grid.Row="9"/>
+        <Button x:Name="btnCreate" Content="Создать заявки"
+                Margin="10,5,10,5" Grid.Column="3" Grid.Row="9"
+                Command="{Binding CreateCommand}"/>
+    </Grid>
+</Window>
