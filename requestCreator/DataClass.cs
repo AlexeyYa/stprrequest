@@ -17,8 +17,10 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -222,6 +224,20 @@ namespace requestCreator
             }
         }
 
+        private bool recursive;
+        public bool Recursive
+        {
+            get { return recursive; }
+            set
+            {
+                if (recursive != value)
+                {
+                    recursive = value;
+                    OnPropertyChanged("Recursive");
+                }
+            }
+        }
+
         private bool inputDialogVisibility;
         public bool InputDialogVisibility
         {
@@ -248,6 +264,28 @@ namespace requestCreator
                     },
                     obj => { return User != null && Group != null && Object != null && Phone != null && Subs != null
                                     && Tasks != null && Data.Count != 0 && PublishType != null && SavePath != null; }));
+            }
+        }
+
+        public void AddData(IEnumerable<string> paths)
+        {
+            foreach (string file in paths)
+            {
+                DataClass d = new DataClass();
+                if (Directory.Exists(file))
+                {
+                    d.DocCode = new DirectoryInfo(file).Name;
+                    d.Size = PdfProcessing.ProcessFolder(file, Recursive);
+
+                }
+                else if (File.Exists(file))
+                {
+                    d.DocCode = System.IO.Path.GetFileNameWithoutExtension(file);
+                    d.Size = PdfProcessing.ProcessFile(file);
+                }
+                d.Link = System.IO.Path.GetDirectoryName(file);
+
+                Data.Add(d);
             }
         }
 

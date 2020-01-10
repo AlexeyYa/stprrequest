@@ -129,10 +129,12 @@
                Margin="10,5,10,5" Grid.Column="3" Grid.Row="2">
         </ComboBox>
 
-        <Button Content="Добавить том"
+        <Button x:Name="btnAddNew" Content="Добавить том"
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="3"/>
-        <Button Content="Добавить из файла/папки"
-               Margin="10,5,10,5" Grid.Column="1" Grid.Row="3"/>
+        <Button x:Name="btnAddFiles" Content="Добавить файлы"
+               Margin="10,5,10,5" Grid.Column="2" Grid.Row="3" Click="btnAddFrom_Click"/>
+        <Button x:Name="btnAddFolders" Content="Добавить папки"
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="3" Click="btnAddFrom_Click"/>
 
         <TextBlock Text="Количество оригиналов:" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="5"/>
@@ -163,7 +165,7 @@
             Margin="10,5,10,5" Grid.Column="1" Grid.Row="9">
         </ComboBox>
         <CheckBox x:Name="cbChildFolders" Content="Считать вложенные папки" VerticalAlignment="Center"
-                Margin="10,5,10,5" Grid.Column="2" Grid.Row="9"/>
+                IsChecked="{Binding Recursive}" Margin="10,5,10,5" Grid.Column="2" Grid.Row="9"/>
         <Button x:Name="btnCreate" Content="Создать заявки"
                 Margin="10,5,10,5" Grid.Column="3" Grid.Row="9"
                 Command="{Binding CreateCommand}"/>

@@ -25,6 +25,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
 using System.Windows.Data;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace requestCreator
 {
@@ -85,26 +86,9 @@ namespace requestCreator
         {
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
-                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                string[] paths = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
-                foreach (string file in files)
-                {
-                    DataClass data = new DataClass();
-                    if (Directory.Exists(file))
-                    {
-                        data.DocCode = new DirectoryInfo(file).Name;
-                        data.Size = PdfProcessing.ProcessFolder(file, cbChildFolders.IsChecked == true);
-                        
-                    }
-                    else if (File.Exists(file))
-                    {
-                        data.DocCode = System.IO.Path.GetFileNameWithoutExtension(file);
-                        data.Size = PdfProcessing.ProcessFile(file);
-                    }
-                    data.Link = System.IO.Path.GetDirectoryName(file);
-
-                    vm.Data.Add(data);
-                }
+                vm.AddData(paths);
             }
         }
 
@@ -229,6 +213,29 @@ namespace requestCreator
 
         private void Window_Closed(object sender, EventArgs e)
         {
+        }
+
+        private void btnAddFrom_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "My Title";
+            if (((Button)sender).Name == "btnAddFolders") {
+                dlg.IsFolderPicker = true;
+            }
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = true;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var paths = dlg.FileNames;
+                vm.AddData(paths);
+            }
         }
     }
 }
