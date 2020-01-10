@@ -147,8 +147,10 @@
         <Separator 
             Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6"/>
 
+        <TextBlock Text="Комментарий:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="7"/>
         <TextBox x:Name="tbComments" Text="{Binding Comments}" TextWrapping="Wrap"
-                 Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="7"/>
+                 Margin="10,5,10,5" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="7"/>
 
         <TextBox x:Name="tbFolder" TextWrapping="Wrap" Text="{Binding SavePath}" 
                 Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="8"/>
