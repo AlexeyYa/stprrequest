@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Window.Resources>
-    <Grid Margin="0,0,0,5">
+    <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -27,7 +28,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition MinHeight="30" Height="*"/>
             <RowDefinition MinHeight="30" MaxHeight="40"/>
-            <RowDefinition MinHeight="30" MaxHeight="40"/>
+            <RowDefinition MinHeight="35" MaxHeight="45"/>
         </Grid.RowDefinitions>
         
         <DockPanel Height="20" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4">
@@ -130,7 +131,8 @@
         </ComboBox>
 
         <Button x:Name="btnAddNew" Content="Добавить том"
-               Margin="10,5,10,5" Grid.Column="0" Grid.Row="3"/>
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="3"
+               Command="{Binding AddNewCommand}"/>
         <Button x:Name="btnAddFiles" Content="Добавить файлы"
                Margin="10,5,10,5" Grid.Column="2" Grid.Row="3" Click="btnAddFrom_Click"/>
         <Button x:Name="btnAddFolders" Content="Добавить папки"
@@ -160,14 +162,37 @@
                 Margin="10,5,10,5" Grid.Column="3" Grid.Row="8"/>
 
         <TextBlock Text="Причина выпуска:" VerticalAlignment="Center"
-               Margin="10,5,10,5" Grid.Column="0" Grid.Row="9"/>
+               Margin="10,5,10,10" Grid.Column="0" Grid.Row="9"/>
         <ComboBox x:Name="cmbPublish" SelectedItem="{Binding PublishType}"
-            Margin="10,5,10,5" Grid.Column="1" Grid.Row="9">
+            Margin="10,5,10,10" Grid.Column="1" Grid.Row="9">
         </ComboBox>
         <CheckBox x:Name="cbChildFolders" Content="Считать вложенные папки" VerticalAlignment="Center"
-                IsChecked="{Binding Recursive}" Margin="10,5,10,5" Grid.Column="2" Grid.Row="9"/>
+                IsChecked="{Binding Recursive}" Margin="10,5,10,10" Grid.Column="2" Grid.Row="9"/>
         <Button x:Name="btnCreate" Content="Создать заявки"
-                Margin="10,5,10,5" Grid.Column="3" Grid.Row="9"
+                Margin="10,5,10,10" Grid.Column="3" Grid.Row="9"
                 Command="{Binding CreateCommand}"/>
+
+        <!-- Input dialog -->
+        <Grid Visibility="{Binding InputDialogVisibility, Converter={StaticResource BoolToVisConverter}}" 
+              Background="Black" Opacity="0.75" Grid.RowSpan="10" Grid.ColumnSpan="4">
+            <Border MinWidth="250"
+                        Background="White"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Margin="10" Text="Введите название"/>
+                    <TextBox x:Name="tbNewCode" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="YesButton" Margin="10" Height="24" Width="24"
+                                    Content="Yes" Command="{Binding ConfirmNewCommand}"
+                                    CommandParameter="{Binding Text, ElementName=tbNewCode}"/>
+                        <Button x:Name="NoButton" Margin="10" Height="24" Width="24"
+                                    Content="No" Command="{Binding CancelNewCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

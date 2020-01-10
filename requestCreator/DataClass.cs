@@ -34,6 +34,7 @@ namespace requestCreator
             Comments = String.Empty;
             Corrections = String.Empty;
             EndDate = DateTime.Now;
+            InputDialogVisibility = false;
         }
 
         private string user;
@@ -267,6 +268,44 @@ namespace requestCreator
             }
         }
 
+        private RelayCommand addNewCommand;
+        public RelayCommand AddNewCommand
+        {
+            get
+            {
+                return addNewCommand ??
+                    (addNewCommand = new RelayCommand(obj =>
+                    {
+                        InputDialogVisibility = true;
+                    }));
+            }
+        }
+        private RelayCommand cancelNewCommand;
+        public RelayCommand CancelNewCommand
+        {
+            get
+            {
+                return cancelNewCommand ??
+                    (cancelNewCommand = new RelayCommand(obj =>
+                    {
+                        InputDialogVisibility = false;
+                    }));
+            }
+        }
+        private RelayCommand confirmNewCommand;
+        public RelayCommand ConfirmNewCommand
+        {
+            get
+            {
+                return confirmNewCommand ??
+                    (confirmNewCommand = new RelayCommand(obj =>
+                    {
+                        AddData(obj.ToString());
+                        InputDialogVisibility = false;
+                    }));
+            }
+        }
+
         public void AddData(IEnumerable<string> paths)
         {
             foreach (string file in paths)
@@ -287,6 +326,12 @@ namespace requestCreator
 
                 Data.Add(d);
             }
+        }
+        public void AddData(string docCode)
+        {
+            DataClass d = new DataClass();
+            d.DocCode = docCode;
+            Data.Add(d);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
