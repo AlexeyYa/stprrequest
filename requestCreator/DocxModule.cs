@@ -28,7 +28,7 @@ namespace requestCreator
             if (vm.Data.Count == 0) { return false; }
             foreach (var data in vm.Data)
             {
-                //try
+                try
                 {
                     DocX document = DocX.Load(@".\cfg\template.docx");
 
@@ -157,7 +157,7 @@ namespace requestCreator
 
                     document.SaveAs(path + data.DocCode + @".docx");
                 }
-                //catch (Exception e)
+                catch (Exception e)
                 {
                     return false;
                 }
