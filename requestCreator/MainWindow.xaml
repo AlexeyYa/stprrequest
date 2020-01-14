@@ -122,7 +122,7 @@
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="2"/>
         <!--<DatePicker x:Name="dtEndDate" SelectedDate="{Binding EndDate}"
                Margin="10,5,10,5" Grid.Column="1" Grid.Row="2"/>-->
-        <TextBox Text="{Binding EndDate}" TextAlignment="Right"
+        <TextBox Text="{Binding EndDate, StringFormat=yyyy-MM-dd HH:mm}" TextAlignment="Right"
                Margin="10,5,10,5" Grid.Column="1" Grid.Row="2"/>
         <TextBlock Text="Субподрядчик:" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="2" Grid.Row="2"/>
