@@ -45,12 +45,12 @@ namespace requestCreator
 
                     if (vm.EndDate != null)
                     {
-                        document.ReplaceText("#DATE#", DateTime.Now.ToString("yyyy-MM-dd") + " Срок "
-                            + vm.EndDate.Value.ToString("yyyy-MM-dd"));
+                        document.ReplaceText("#DATE#", DateTime.Now.ToString("yyyy-MM-dd HH:mm") + " Срок "
+                            + vm.EndDate.Value.ToString("yyyy-MM-dd HH:mm"));
                     }
                     else
                     {
-                        document.ReplaceText("#DATE#", DateTime.Now.ToString("yyyy-MM-dd"));
+                        document.ReplaceText("#DATE#", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
                     }
 
                     document.ReplaceText("#ORIG#", vm.NumberOfOriginals.ToString());
