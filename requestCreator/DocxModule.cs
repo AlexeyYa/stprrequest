@@ -30,7 +30,7 @@ namespace requestCreator
             {
                 try
                 {
-                    DocX document = DocX.Load(@".\cfg\template.docx");
+                    DocX document = DocX.Load(Variables.pathTemplate);
 
                     document.ReplaceText("#DOCCODE#", data.DocCode);
                     document.ReplaceText("#FIO#", vm.User);

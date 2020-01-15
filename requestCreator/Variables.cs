@@ -26,6 +26,7 @@ namespace requestCreator
 {
     public class Variables
     {
+        public const string pathTemplate = @".\cfg\template.docx";
         const string pathObjects = @".\cfg\objects.txt";
         const string pathGroups = @".\cfg\groups.txt";
         const string pathSubs = @".\cfg\subs.txt";
