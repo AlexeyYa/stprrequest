@@ -26,6 +26,11 @@ namespace requestCreator
 {
     public class Variables
     {
+        const string pathObjects = @".\cfg\objects.txt";
+        const string pathGroups = @".\cfg\groups.txt";
+        const string pathSubs = @".\cfg\subs.txt";
+        const string pathPublishTypes = @".\cfg\publishtype.txt";
+
         private static Variables instance;
         public static Variables Instance
         {
@@ -80,7 +85,7 @@ namespace requestCreator
 
         private void LoadObjects()
         {
-            string[] objectsArray = File.ReadAllLines(@".\cfg\objects.txt");
+            string[] objectsArray = File.ReadAllLines(pathObjects);
             foreach (string elem in objectsArray)
             {
                 objects.Add(elem);
@@ -88,7 +93,7 @@ namespace requestCreator
         }
         private void LoadGroups()
         {
-            string[] groupsArray = File.ReadAllLines(@".\cfg\groups.txt");
+            string[] groupsArray = File.ReadAllLines(pathGroups);
             foreach (string g in groupsArray)
             {
                 groups.Add(g);
@@ -96,7 +101,7 @@ namespace requestCreator
         }
         private void LoadSubs()
         {
-            string[] subsArray = File.ReadAllLines(@".\cfg\subs.txt");
+            string[] subsArray = File.ReadAllLines(pathSubs);
             foreach (string sub in subsArray)
             {
                 subs.Add(sub);
@@ -104,7 +109,7 @@ namespace requestCreator
         }
         private void LoadPublishTypes()
         {
-            string[] publishArray = File.ReadAllLines(@".\cfg\publishtype.txt");
+            string[] publishArray = File.ReadAllLines(pathPublishTypes);
             foreach (string pub in publishArray)
             {
                 publishTypes.Add(pub);

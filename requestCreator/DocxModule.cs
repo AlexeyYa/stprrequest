@@ -39,7 +39,9 @@ namespace requestCreator
                     document.ReplaceText("#FGM#", vm.Tasks);
                     document.ReplaceText("#LINK#", data.Link);
                     document.ReplaceText("#PHONE#", vm.Phone);
-                    document.ReplaceText("#SUBS#", vm.Subs);
+                    if (vm.Subs == Variables.Instance.Subs[0])
+                        document.ReplaceText("#SUBS#", "-");
+                    else document.ReplaceText("#SUBS#", vm.Subs);
                     document.ReplaceText("#COMMENTS#", vm.Comments);
                     document.ReplaceText("#PUBLISHTYPE#", vm.PublishType);
 
