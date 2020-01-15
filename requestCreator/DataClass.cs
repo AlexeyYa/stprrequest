@@ -97,8 +97,25 @@ namespace requestCreator
             {
                 if (subs != value)
                 {
+                    if (value == Variables.Instance.Subs[Variables.Instance.Subs.Count - 1]) // If last allow editing
+                    {
+                        SubsIsEditable = true;
+                    }
                     subs = value;
                     OnPropertyChanged("Subs");
+                }
+            }
+        }
+        private bool subsIsEditable;
+        public bool SubsIsEditable
+        {
+            get { return subsIsEditable; }
+            set
+            {
+                if (subsIsEditable != value)
+                {
+                    subsIsEditable = value;
+                    OnPropertyChanged("SubsIsEditable");
                 }
             }
         }
@@ -263,7 +280,7 @@ namespace requestCreator
                             MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл", "Ошибка");
                         }
                     },
-                    obj => { return User != null && Group != null && Object != null && Phone != null && Subs != null
+                    obj => { return User != null && Group != null && Object != null && Phone != null && Subs != String.Empty
                                     && Tasks != null && Data.Count != 0 && PublishType != null && SavePath != null; }));
             }
         }

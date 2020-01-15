@@ -51,7 +51,6 @@ namespace requestCreator
         }
 
         // Init
-
         private void LoadSettings()
         {
             if (Properties.Settings.Default.User != null && Properties.Settings.Default.User != String.Empty)
