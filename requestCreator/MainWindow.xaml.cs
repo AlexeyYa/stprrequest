@@ -26,6 +26,7 @@ using System.Windows.Media;
 using Microsoft.Win32;
 using System.Windows.Data;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Globalization;
 
 namespace requestCreator
 {
@@ -68,7 +69,7 @@ namespace requestCreator
 
             if (Properties.Settings.Default.Path != null && Properties.Settings.Default.Path != String.Empty)
             {
-                tbFolder.Text = Properties.Settings.Default.Path;
+                vm.SavePath = Properties.Settings.Default.Path;
             }
         }
 
@@ -189,12 +190,12 @@ namespace requestCreator
         private void ClearSize(object sender, RoutedEventArgs e)
         {
             DataClass d = ((FrameworkElement)sender).DataContext as DataClass;
-            d.Size = null;
+            d.Size = new PdfFormat();
         }
         private void ClearSizeCor(object sender, RoutedEventArgs e)
         {
             DataClass d = ((FrameworkElement)sender).DataContext as DataClass;
-            d.SizeCor = null;
+            d.SizeCor = new PdfFormat();
         }
 
         private void ShowHideDetails(object sender, RoutedEventArgs e)
@@ -235,6 +236,47 @@ namespace requestCreator
                 var paths = dlg.FileNames;
                 vm.AddData(paths);
             }
+        }
+
+
+        public void lostFocus(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            if (tb.Name == "tbOrig")
+            {
+                vm.NroCh = true;
+            }
+            else
+            {
+                vm.NrcCh = true;
+            }
+        }
+    }
+
+    public class BoolToStyleConverter : IValueConverter
+    {
+        /*Style invalidStyle = new Style();
+        Style validStyle = new Style();
+        BoolToStyleConverter(string value)
+        {
+            invalidStyle.Setters.Add(new Setter { Property = Control.BorderBrushProperty, Value = new SolidColorBrush(Colors.Red) });
+            invalidStyle.Setters.Add(new Setter { Property = Control.BorderThicknessProperty, Value = 2 });
+        }*/
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Style invalidStyle = new Style();
+            Style validStyle = new Style();
+            invalidStyle.Setters.Add(new Setter { Property = Control.BorderBrushProperty, Value = new SolidColorBrush(Colors.Red) });
+            invalidStyle.Setters.Add(new Setter { Property = Control.BorderThicknessProperty, Value = new Thickness(2) });
+            if ((bool)value)
+                return validStyle;
+            else
+                return invalidStyle;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }

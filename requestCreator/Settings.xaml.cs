@@ -16,10 +16,12 @@ limitations under the License.
 
 */
 
+using System;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace requestCreator
 {
@@ -28,7 +30,6 @@ namespace requestCreator
     /// </summary>
     public partial class SettingsWindow : Window
     {
-
         private ObservableCollection<string> groupsCollection = new ObservableCollection<string>();
 
         public SettingsWindow()
@@ -50,6 +51,9 @@ namespace requestCreator
             tbUser.Text = Properties.Settings.Default.User;
             tbPhone.Text = Properties.Settings.Default.Phone;
             cmbGroup.SelectedItem = Properties.Settings.Default.Group;
+            tbSender.Text = Properties.Settings.Default.Sender;
+
+            tbConfig.Text = Properties.Settings.Default.ConfigPath;
         }
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
@@ -58,6 +62,11 @@ namespace requestCreator
             Properties.Settings.Default.Phone = tbPhone.Text;
             Properties.Settings.Default.Group = cmbGroup.SelectedItem as string;
             Properties.Settings.Default.Path = tbPath.Text;
+            Properties.Settings.Default.Sender = tbSender.Text;
+
+            Properties.Settings.Default.ConfigPath = tbConfig.Text;
+            Variables.Instance.LoadConfig();
+
             Properties.Settings.Default.Save();
 
             DialogResult = true;

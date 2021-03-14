@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace requestCreator
 {
@@ -45,8 +46,20 @@ namespace requestCreator
             }
         }
 
-        private List<string> objects = new List<string>(), groups = new List<string>(),
-            subs = new List<string>(), publishTypes = new List<string>();
+        private List<string> objects = new List<string>(),
+            groups = new List<string>(),
+            subs = new List<string>(),
+            publishTypes = new List<string>(),
+            recieversList = new List<string>();
+
+        public List<string> RecieversList
+        {
+            get
+            {
+                return recieversList;
+            }
+        }
+
         public List<string> Objects
         {
             get
@@ -82,6 +95,7 @@ namespace requestCreator
             LoadGroups();
             LoadSubs();
             LoadPublishTypes();
+            LoadConfig();
         }
 
         private void LoadObjects()
@@ -114,6 +128,30 @@ namespace requestCreator
             foreach (string pub in publishArray)
             {
                 publishTypes.Add(pub);
+            }
+        }
+        public void LoadConfig()
+        {
+            try
+            {
+                string[] cfg = File.ReadAllLines(Properties.Settings.Default.ConfigPath);
+
+                if (cfg.Length > 0)
+                {
+                    recieversList = new List<string>();
+                    foreach (string reciever in cfg)
+                    {
+                        recieversList.Add(reciever);
+                    }
+                }
+                else
+                {
+                    MessageBoxResult messageBox = MessageBox.Show("Файл конфигурации пуст", "Ошибка");
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBoxResult messageBox = MessageBox.Show("Ошибка при загрузке конфигурации\n" + e, "Ошибка");
             }
         }
     }
