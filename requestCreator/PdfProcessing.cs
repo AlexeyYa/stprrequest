@@ -17,7 +17,9 @@ limitations under the License.
 */
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Windows.Data;
 using iText.Kernel.Pdf;
 
 namespace requestCreator
@@ -115,6 +117,15 @@ namespace requestCreator
         public int A1 { get; set; }
         public int A0 { get; set; }
 
+        public PdfFormat()
+        {
+            Formats = 0;
+            A4 = 0;
+            A3 = 0;
+            A2 = 0;
+            A1 = 0;
+            A0 = 0;
+        }
         public PdfFormat(int Formats_, int A4_, int A3_, int A2_, int A1_, int A0_)
         {
             Formats = Formats_;
@@ -136,6 +147,50 @@ namespace requestCreator
         public override string ToString()
         {
             return this.Formats + "(" + this.A4 + ", " + this.A3 + ", " + this.A2 + ", " + this.A1 + ", " + this.A0 + ")";
+        }
+
+        public static PdfFormat FromString(string str)
+        {
+            PdfFormat pdfFormat = new PdfFormat();
+            int result = 0;
+            if (str.Contains("("))
+            {
+                int d1 = str.IndexOf("(");
+                int d2 = str.IndexOf(",");
+                int d3 = str.IndexOf(",", d2 + 1);
+                int d4 = str.IndexOf(",", d3 + 1);
+                int d5 = str.IndexOf(",", d4 + 1);
+                int d6 = str.IndexOf(")", d5 + 1);
+                Int32.TryParse(str.Substring(0, d1), out result);
+                pdfFormat.Formats = result;
+                Int32.TryParse(str.Substring(d1+1, d2 - d1-1), out result);
+                pdfFormat.A4 = result;
+                Int32.TryParse(str.Substring(d2+1, d3 - d2-1), out result);
+                pdfFormat.A3 = result;
+                Int32.TryParse(str.Substring(d3+1, d4 - d3-1), out result);
+                pdfFormat.A2 = result;
+                Int32.TryParse(str.Substring(d4+1, d5 - d4-1), out result);
+                pdfFormat.A1 = result;
+                Int32.TryParse(str.Substring(d5+1, d6 - d5-1), out result);
+                pdfFormat.A0 = result;
+            }
+            else if (Int32.TryParse(str, out result))
+            {
+                pdfFormat.Formats = result;
+            }
+            return pdfFormat;
+        }
+    }
+
+    public class PdfFormatConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((PdfFormat)value).ToString();
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return PdfFormat.FromString((string)value);
         }
     }
 }

@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 using System;
+using System.Windows;
 using Xceed.Words.NET;
 
 namespace requestCreator
@@ -37,12 +38,12 @@ namespace requestCreator
                     document.ReplaceText("#GROUP#", vm.Group);
                     document.ReplaceText("#OBJCODE#", vm.Object);
                     document.ReplaceText("#FGM#", vm.Tasks);
-                    document.ReplaceText("#LINK#", data.Link);
+                    document.ReplaceText("#LINK#", data.Link != null ? data.Link : "");
                     document.ReplaceText("#PHONE#", vm.Phone);
                     if (vm.Subs == Variables.Instance.Subs[0])
                         document.ReplaceText("#SUBS#", "-");
                     else document.ReplaceText("#SUBS#", vm.Subs);
-                    document.ReplaceText("#COMMENTS#", vm.Comments);
+                    document.ReplaceText("#COMMENTS#", vm.Comments != null ? vm.Comments : "");
                     document.ReplaceText("#PUBLISHTYPE#", vm.PublishType);
 
                     if (vm.EndDate != null)
@@ -161,6 +162,7 @@ namespace requestCreator
                 }
                 catch (Exception e)
                 {
+                    MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл заявки\n" + e, "Ошибка");
                     return false;
                 }
             }

@@ -17,5 +17,11 @@
     <Setting Name="Path" Type="System.String" Scope="User">
       <Value Profile="(Default)">Выберите папку для сохранения</Value>
     </Setting>
+    <Setting Name="ConfigPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\\cfg\\cfg.txt</Value>
+    </Setting>
+    <Setting Name="Sender" Type="System.String" Scope="User">
+      <Value Profile="(Default)">aayamborisov@stpr.ru</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

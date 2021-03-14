@@ -8,6 +8,8 @@
         Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <local:PdfFormatConverter x:Key="PdfFormatConverter"/>
+        <local:BoolToStyleConverter x:Key="BoolToStyleConverter"/>
     </Window.Resources>
     <Grid>
 
@@ -29,6 +31,7 @@
             <RowDefinition MinHeight="30" Height="*"/>
             <RowDefinition MinHeight="30" MaxHeight="40"/>
             <RowDefinition MinHeight="35" MaxHeight="45"/>
+            <RowDefinition MinHeight="30" MaxHeight="40"/>
         </Grid.RowDefinitions>
         
         <DockPanel Height="20" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4">
@@ -61,7 +64,8 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{Binding Size}"/>
+                                <TextBox Text="{Binding Path=Size,Converter={StaticResource PdfFormatConverter},
+                                    UpdateSourceTrigger=LostFocus}"/>
                                 <Button Click="ClearSize" Grid.Column="1">-</Button>
                                 <Button Click="EditSize" Grid.Column="2">+</Button>
                             </Grid>
@@ -78,7 +82,8 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{Binding SizeCor}"/>
+                                <TextBox Text="{Binding Path=SizeCor,Converter={StaticResource PdfFormatConverter}, UpdateSourceTrigger=LostFocus}"
+                                         Style="{Binding Path=CorrectCh, Converter={StaticResource BoolToStyleConverter}}"/>
                                 <Button Click="ClearSizeCor" Grid.Column="1">-</Button>
                                 <Button Click="EditSizeCor" Grid.Column="2">+</Button>
                             </Grid>
@@ -110,13 +115,16 @@
 
         <TextBlock Text="Объект" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="1"/>
+        <Border Margin="10,5,10,5" Grid.Column="1" Grid.Row="1" Style="{Binding Path=ObjectCh, Converter={StaticResource BoolToStyleConverter}}">
         <ComboBox x:Name="cmbObject" SelectedItem="{Binding Object}"
-               Margin="10,5,10,5" Grid.Column="1" Grid.Row="1">
-        </ComboBox>
+               IsEditable="True"/>
+        </Border>
         <Button x:Name="BtnTasks" Content="Форма готового материала" Click="BtnTasks_Click"
-               Margin="10,5,10,5" Grid.Column="2" Grid.Row="1"/>
+               Margin="10,5,10,5" Grid.Column="2" Grid.Row="1"
+                Style="{Binding Path=TasksCh, Converter={StaticResource BoolToStyleConverter}}"/>
         <Button x:Name="CorrectionsBtn" Content="Корректировки" Click="CorrectionsBtn_Click"
-               Margin="10,5,10,5" Grid.Column="3" Grid.Row="1"/>
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="1"
+                Style="{Binding Path=CorrectCh, Converter={StaticResource BoolToStyleConverter}}"/>
 
         <TextBlock Text="Срок выполнения заявки:" VerticalAlignment="Center"  
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="2"/>
@@ -126,9 +134,11 @@
                Margin="10,5,10,5" Grid.Column="1" Grid.Row="2"/>
         <TextBlock Text="Субподрядчик:" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="2" Grid.Row="2"/>
-        <ComboBox x:Name="cmbSub" Text="{Binding Subs}" IsEditable="{Binding SubsIsEditable}"
-               Margin="10,5,10,5" Grid.Column="3" Grid.Row="2">
-        </ComboBox>
+
+        <Border Margin="10,5,10,5" Grid.Column="3" Grid.Row="2" Style="{Binding Path=SubsCh, Converter={StaticResource BoolToStyleConverter}}">
+            <ComboBox x:Name="cmbSub" Text="{Binding Subs}" IsEditable="{Binding SubsIsEditable}">
+            </ComboBox>
+        </Border>
 
         <Button x:Name="btnAddNew" Content="Добавить том"
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="3"
@@ -141,11 +151,15 @@
         <TextBlock Text="Количество оригиналов:" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="0" Grid.Row="5"/>
         <TextBox x:Name="tbOrig" Text="{Binding NumberOfOriginals}" 
-               Margin="10,5,10,5" Grid.Column="1" Grid.Row="5"/>
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="5"
+                 Style="{Binding Path=NroCh, Converter={StaticResource BoolToStyleConverter}}"
+                 LostFocus="lostFocus"/>
         <TextBlock Text="Количество копий:" VerticalAlignment="Center"
                Margin="10,5,10,5" Grid.Column="2" Grid.Row="5"/>
         <TextBox x:Name="tbCopy" Text="{Binding NumberOfCopies}" 
-               Margin="10,5,10,5" Grid.Column="3" Grid.Row="5"/>
+               Margin="10,5,10,5" Grid.Column="3" Grid.Row="5"
+                 Style="{Binding Path=NrcCh, Converter={StaticResource BoolToStyleConverter}}"
+                 LostFocus="lostFocus"/>
 
 
         <Separator 
@@ -163,18 +177,24 @@
 
         <TextBlock Text="Причина выпуска:" VerticalAlignment="Center"
                Margin="10,5,10,10" Grid.Column="0" Grid.Row="9"/>
-        <ComboBox x:Name="cmbPublish" SelectedItem="{Binding PublishType}"
-            Margin="10,5,10,10" Grid.Column="1" Grid.Row="9">
-        </ComboBox>
+        <Border Margin="10,5,10,10" Grid.Column="1" Grid.Row="9" Style="{Binding Path=PublishCh, Converter={StaticResource BoolToStyleConverter}}">
+            <ComboBox x:Name="cmbPublish" SelectedItem="{Binding PublishType}"/>
+        </Border>
         <CheckBox x:Name="cbChildFolders" Content="Считать вложенные папки" VerticalAlignment="Center"
                 IsChecked="{Binding Recursive}" Margin="10,5,10,10" Grid.Column="2" Grid.Row="9"/>
         <Button x:Name="btnCreate" Content="Создать заявки"
                 Margin="10,5,10,10" Grid.Column="3" Grid.Row="9"
                 Command="{Binding CreateCommand}"/>
 
+
+        <TextBlock Text="Дополнительные адресаты:" VerticalAlignment="Center"
+               Margin="10,5,10,5" Grid.Column="0" Grid.Row="10"/>
+        <TextBox x:Name="tbAddr" Text="{Binding Recievers}" 
+               Margin="10,5,10,5" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="3"/>
+
         <!-- Input dialog -->
         <Grid Visibility="{Binding InputDialogVisibility, Converter={StaticResource BoolToVisConverter}}" 
-              Background="Black" Opacity="0.75" Grid.RowSpan="10" Grid.ColumnSpan="4">
+              Background="Black" Opacity="0.75" Grid.RowSpan="11" Grid.ColumnSpan="4">
             <Border MinWidth="250"
                         Background="White"
                         BorderBrush="Black"

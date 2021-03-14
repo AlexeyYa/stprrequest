@@ -82,5 +82,29 @@ namespace requestCreator.Properties {
                 this["Path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\\\cfg\\\\cfg.txt")]
+        public string ConfigPath {
+            get {
+                return ((string)(this["ConfigPath"]));
+            }
+            set {
+                this["ConfigPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("aayamborisov@stpr.ru")]
+        public string Sender {
+            get {
+                return ((string)(this["Sender"]));
+            }
+            set {
+                this["Sender"] = value;
+            }
+        }
     }
 }

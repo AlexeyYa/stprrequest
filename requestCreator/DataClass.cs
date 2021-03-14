@@ -23,6 +23,79 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
+
+
+using Microsoft.Exchange.WebServices.Data;
+using System.Windows.Controls;
+
+namespace Exchange
+{
+    public static class Emailer
+    {
+        public static void SendEmail(string from, IEnumerable<string> to, string subject, string body, string attachmentFileName)
+        {
+            var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.AutodiscoverUrl(from);
+            var message = new EmailMessage(service)
+            {
+                Subject = subject,
+                Body = body,
+            };
+            message.ToRecipients.AddRange(to);
+            message.Attachments.AddFileAttachment(attachmentFileName);
+            message.SendAndSaveCopy();
+        }
+
+        public static void SendEmail(string from, IEnumerable<string> to, string subject,
+            string body, IEnumerable<string> attachmentFileNames)
+        {
+            var service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.AutodiscoverUrl(from);
+            var message = new EmailMessage(service)
+            {
+                Subject = subject,
+                Body = body,
+            };
+            message.ToRecipients.AddRange(to);
+            foreach (var file in attachmentFileNames)
+                message.Attachments.AddFileAttachment(file);
+
+            message.SendAndSaveCopy();
+        }
+
+        /* SMTP variant
+            using System.Net;
+            using System.Net.Mail;
+
+        private static void SendSMTP(string smtpServer, string recipient,
+            string user, string password, string attachment,
+            string subject, string body)
+        {
+            SmtpClient smtpClient = new SmtpClient();
+            NetworkCredential networkCredential = new NetworkCredential(user, password);
+            MailMessage mail = new MailMessage();
+            MailAddress fromAddress = new MailAddress(user);
+
+            smtpClient.Host = smtpServer;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = networkCredential;
+            smtpClient.Timeout = (5 * 1000);
+            smtpClient.EnableSsl = true;
+
+            mail.From = fromAddress;
+            mail.Subject = subject;
+            mail.IsBodyHtml = false;
+            mail.Body = body;
+            mail.To.Add(recipient);
+
+            if (attachment != null)
+                mail.Attachments.Add(new System.Net.Mail.Attachment(attachment));
+
+            smtpClient.Send(mail);
+        }*/
+    }
+}
 
 namespace requestCreator
 {
@@ -71,6 +144,11 @@ namespace requestCreator
             {
                 if (obj != value)
                 {
+                    if (value != null && value != "")
+                        ObjectCh = true;
+                    else
+                        ObjectCh = false;
+
                     obj = value;
                     OnPropertyChanged("Object");
                 }
@@ -101,6 +179,12 @@ namespace requestCreator
                     {
                         SubsIsEditable = true;
                     }
+
+                    if (value != null && value != "")
+                        SubsCh = true;
+                    else
+                        SubsCh = false;
+
                     subs = value;
                     OnPropertyChanged("Subs");
                 }
@@ -140,6 +224,11 @@ namespace requestCreator
             {
                 if (publishType != value)
                 {
+                    if (value != null && value != "")
+                        PublishCh = true;
+                    else
+                        PublishCh = false;
+
                     publishType = value;
                     OnPropertyChanged("PublishType");
                 }
@@ -153,6 +242,11 @@ namespace requestCreator
             {
                 if (tasks != value)
                 {
+                    if (value != null && value != "")
+                        TasksCh = true;
+                    else
+                        TasksCh = false;
+                 
                     tasks = value;
                     OnPropertyChanged("Tasks");
                 }
@@ -267,6 +361,19 @@ namespace requestCreator
                 }
             }
         }
+        private string recievers;
+        public string Recievers
+        {
+            get { return recievers; }
+            set
+            {
+                if (recievers != value)
+                {
+                    recievers = value;
+                    OnPropertyChanged("Recievers");
+                }
+            }
+        }
         private RelayCommand createCommand;
         public RelayCommand CreateCommand
         {
@@ -275,13 +382,54 @@ namespace requestCreator
                 return createCommand ??
                     (createCommand = new RelayCommand(obj =>
                     {
+                        if (Subs != Variables.Instance.Subs[0])
+                        {
+                            PdfFormat sum = new PdfFormat();
+                            DataClass new_data = new DataClass();
+                            new_data.Link = data[0].Link;
+                            new_data.DocCode = Subs + "-" + data.Count + "т";
+                            foreach (var d in data)
+                            {
+                                sum += d.Size;
+                                Comments += d.DocCode + ";";
+                            }
+                            new_data.Size = sum;
+                            data.Clear();
+                            data.Add(new_data);
+                        }
+
                         if (!DocxModule.Create(this, SavePath))
                         {
-                            MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл", "Ошибка");
+                            MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                var RecieversList = new List<string>(Variables.Instance.RecieversList);
+                                if (Recievers != "" && Recievers != null)
+                                    RecieversList.AddRange(Recievers.Split(';'));
+                                List<string> attachmentFileNames = new List<string>();
+                                foreach (var d in data)
+                                {
+                                    attachmentFileNames.Add(SavePath + d.DocCode + @".docx");
+                                    //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
+                                    //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
+                                    //    SavePath + d.DocCode + @".docx", "test attachment", "body");
+                                }
+                                Exchange.Emailer.SendEmail(Properties.Settings.Default.Sender,
+                                    RecieversList,
+                                    "subj", "body", attachmentFileNames);
+                                MessageBox.Show("Заявка отправлена", "Успешно", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                            }
+                            catch (Exception e) {
+                                MessageBoxResult messageBox = MessageBox.Show("Не удалось отправить файл\n" + e, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
                     },
-                    obj => { return User != null && Group != null && Object != null && Phone != null && Subs != String.Empty
-                                    && Tasks != null && Data.Count != 0 && PublishType != null && SavePath != null; }));
+                    obj => {
+                        return CreateCommandEnabler();
+                    }));
             }
         }
 
@@ -356,6 +504,121 @@ namespace requestCreator
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        private bool objectCh = false;
+        public bool ObjectCh
+        {
+            get { return objectCh; }
+            set
+            {
+                if (objectCh != value)
+                {
+                    objectCh = value;
+                    OnPropertyChanged("ObjectCh");
+                }
+            }
+        }
+        private bool subsCh = false;
+        public bool SubsCh
+        {
+            get { return subsCh; }
+            set
+            {
+                if (subsCh != value)
+                {
+                    subsCh = value;
+                    OnPropertyChanged("SubsCh");
+                }
+            }
+        }
+        private bool tasksCh = false;
+        public bool TasksCh
+        {
+            get { return tasksCh; }
+            set
+            {
+                if (tasksCh != value)
+                {
+                    tasksCh = value;
+                    OnPropertyChanged("TasksCh");
+                }
+            }
+        }
+        private bool publishCh = false;
+        public bool PublishCh
+        {
+            get { return publishCh; }
+            set
+            {
+                if (publishCh != value)
+                {
+                    publishCh = value;
+                    OnPropertyChanged("PublishCh");
+                }
+            }
+        }
+        private bool correctCh = false;
+        public bool CorrectCh
+        {
+            get { return correctCh; }
+            set
+            {
+                if (correctCh != value)
+                {
+                    correctCh = value;
+                    OnPropertyChanged("CorrectCh");
+                }
+            }
+        }
+        private bool nroCh = false;
+        public bool NroCh
+        {
+            get { return nroCh; }
+            set
+            {
+                if (nroCh != value)
+                {
+                    nroCh = value;
+                    OnPropertyChanged("NroCh");
+                }
+            }
+        }
+        private bool nrcCh = false;
+        public bool NrcCh
+        {
+            get { return nrcCh; }
+            set
+            {
+                if (nrcCh != value)
+                {
+                    nrcCh = value;
+                    OnPropertyChanged("NrcCh");
+                }
+            }
+        }
+
+
+        private bool CreateCommandEnabler()
+        {
+            bool settingsCh = User != null && User != "" && // Simple checks
+                               Group != null && Group != "" &&
+                               Phone != null && Phone != "" &&
+                               SavePath != null && SavePath != "";
+            bool emptyCh = Data.Count != 0;
+
+            var vtor_v = (PublishType == Variables.Instance.PublishTypes[1]);
+            var cor = (Corrections != null && Corrections != "");
+            var sub = (Subs != Variables.Instance.Subs[0]);
+
+            CorrectCh = ((!cor && sub) || (!sub && (vtor_v == cor))) &&
+                               ((cor == data.Any(d => { return d.SizeCor.Formats != 0; })) ||
+                               (!cor == data.Any(d => { return d.SizeCor.Formats == 0; })));
+
+            foreach (var d in Data)
+                d.UpdateCor(cor);
+
+            return settingsCh && emptyCh && objectCh && subsCh && tasksCh && publishCh && correctCh;
+        }
     }
 
     class DataClass : INotifyPropertyChanged
@@ -389,7 +652,7 @@ namespace requestCreator
                 }
             }
         }
-        private PdfFormat size;
+        private PdfFormat size = new PdfFormat();
         public PdfFormat Size
         {
             get { return size; }
@@ -402,7 +665,7 @@ namespace requestCreator
                 }
             }
         }
-        private PdfFormat sizeCor;
+        private PdfFormat sizeCor = new PdfFormat();
         public PdfFormat SizeCor
         {
             get { return sizeCor; }
@@ -414,6 +677,25 @@ namespace requestCreator
                     OnPropertyChanged("SizeCor");
                 }
             }
+        }
+
+        private bool correctCh = false;
+        public bool CorrectCh
+        {
+            get { return correctCh; }
+            set
+            {
+                if (correctCh != value)
+                {
+                    correctCh = value;
+                    OnPropertyChanged("CorrectCh");
+                }
+            }
+        }
+
+        public void UpdateCor(bool need_corrections)
+        {
+            CorrectCh = need_corrections == (SizeCor.Formats != 0);
         }
 
         protected void OnPropertyChanged(string name)
