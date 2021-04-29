@@ -52,7 +52,7 @@ namespace requestCreator
             tbPhone.Text = Properties.Settings.Default.Phone;
             cmbGroup.SelectedItem = Properties.Settings.Default.Group;
             tbSender.Text = Properties.Settings.Default.Sender;
-
+            //tbPath.Text = Properties.Settings.Default.Path;
             tbConfig.Text = Properties.Settings.Default.ConfigPath;
         }
 
@@ -61,7 +61,7 @@ namespace requestCreator
             Properties.Settings.Default.User = tbUser.Text;
             Properties.Settings.Default.Phone = tbPhone.Text;
             Properties.Settings.Default.Group = cmbGroup.SelectedItem as string;
-            Properties.Settings.Default.Path = tbPath.Text;
+            //Properties.Settings.Default.Path = tbPath.Text;
             Properties.Settings.Default.Sender = tbSender.Text;
 
             Properties.Settings.Default.ConfigPath = tbConfig.Text;
@@ -77,7 +77,7 @@ namespace requestCreator
             DialogResult = false;
         }
 
-        private void BtnFolder_Click(object sender, RoutedEventArgs e)
+        /*private void BtnFolder_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog folderBrowser = new OpenFileDialog
             {
@@ -95,6 +95,6 @@ namespace requestCreator
                 }
                 tbPath.Text = pth;
             }
-        }
+        }*/
     }
 }

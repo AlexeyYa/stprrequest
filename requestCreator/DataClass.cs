@@ -319,23 +319,6 @@ namespace requestCreator
             }
         }
 
-        private string savePath;
-        public string SavePath
-        {
-            get { return savePath; }
-            set
-            {
-                if (savePath != value)
-                {
-                    if (value[value.Length - 1] != '\\'){
-                        value += '\\';
-                    }
-                    savePath = value;
-                    OnPropertyChanged("SavePath");
-                }
-            }
-        }
-
         private bool recursive;
         public bool Recursive
         {
@@ -398,7 +381,7 @@ namespace requestCreator
                             data.Add(new_data);
                         }
 
-                        if (!DocxModule.Create(this, SavePath))
+                        if (!DocxModule.Create(this, Variables.Instance.Path))
                         {
                             MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
@@ -412,7 +395,7 @@ namespace requestCreator
                                 List<string> attachmentFileNames = new List<string>();
                                 foreach (var d in data)
                                 {
-                                    attachmentFileNames.Add(SavePath + d.DocCode + @".docx");
+                                    attachmentFileNames.AddRange(DocxModule.GetFilenames());
                                     //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
                                     //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
                                     //    SavePath + d.DocCode + @".docx", "test attachment", "body");
@@ -420,6 +403,7 @@ namespace requestCreator
                                 Exchange.Emailer.SendEmail(Properties.Settings.Default.Sender,
                                     RecieversList,
                                     "subj", "body", attachmentFileNames);
+                                DocxModule.GetFilenames().Clear();
                                 MessageBox.Show("Заявка отправлена", "Успешно", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                             }
                             catch (Exception e) {
@@ -602,8 +586,7 @@ namespace requestCreator
         {
             bool settingsCh = User != null && User != "" && // Simple checks
                                Group != null && Group != "" &&
-                               Phone != null && Phone != "" &&
-                               SavePath != null && SavePath != "";
+                               Phone != null && Phone != "";
             bool emptyCh = Data.Count != 0;
 
             var vtor_v = (PublishType == Variables.Instance.PublishTypes[1]);

@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using Xceed.Words.NET;
 
@@ -24,9 +25,18 @@ namespace requestCreator
 {
     class DocxModule
     {
+        private static List<string> savedFiles = new List<string>();
+
         public static bool Create(ViewModel vm, string path)
         {
             if (vm.Data.Count == 0) { return false; }
+
+            int counter = 0;
+
+            string filenameBase = DateTime.Now.ToString(
+                Variables.Instance.Filename.Substring(
+                            Variables.Instance.Filename.IndexOf('@') + 1,
+                            Variables.Instance.Filename.IndexOf('#') - Variables.Instance.Filename.IndexOf('@') - 1));
             foreach (var data in vm.Data)
             {
                 try
@@ -158,7 +168,15 @@ namespace requestCreator
                         document.ReplaceText("#7#", "");
                     }
 
-                    document.SaveAs(path + data.DocCode + @".docx");
+                    string filename = path
+                        + filenameBase
+                        + counter + 't' 
+                        + data.DocCode
+                        + @".docx";
+
+                    document.SaveAs(filename);
+                    counter++;
+                    savedFiles.Add(filename);
                 }
                 catch (Exception e)
                 {
@@ -167,6 +185,11 @@ namespace requestCreator
                 }
             }
             return true;
+        }
+
+        public static List<string> GetFilenames()
+        {
+            return savedFiles;
         }
     }
 }

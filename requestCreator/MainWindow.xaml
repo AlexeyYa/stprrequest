@@ -170,10 +170,13 @@
         <TextBox x:Name="tbComments" Text="{Binding Comments}" TextWrapping="Wrap"
                  Margin="10,5,10,5" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="7"/>
 
-        <TextBox x:Name="tbFolder" TextWrapping="Wrap" Text="{Binding SavePath}" 
+        <Separator 
+            Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="8"/>
+
+        <!--<TextBox x:Name="tbFolder" TextWrapping="Wrap" Text="{Binding SavePath}" 
                 Margin="10,5,10,5" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="8"/>
         <Button x:Name="btnFolder" Content="Выбор папки для сохранения" Click="BtnFolder_Click"
-                Margin="10,5,10,5" Grid.Column="3" Grid.Row="8"/>
+                Margin="10,5,10,5" Grid.Column="3" Grid.Row="8"/>-->
 
         <TextBlock Text="Причина выпуска:" VerticalAlignment="Center"
                Margin="10,5,10,10" Grid.Column="0" Grid.Row="9"/>

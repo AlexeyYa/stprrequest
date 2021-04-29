@@ -52,6 +52,7 @@ namespace requestCreator
             publishTypes = new List<string>(),
             recieversList = new List<string>();
 
+        private string path, filename;
         public List<string> RecieversList
         {
             get
@@ -86,6 +87,20 @@ namespace requestCreator
             get
             {
                 return publishTypes;
+            }
+        }
+        public string Path
+        {
+            get
+            {
+                return path;
+            }
+        }
+        public string Filename
+        {
+            get
+            {
+                return filename;
             }
         }
 
@@ -139,9 +154,29 @@ namespace requestCreator
                 if (cfg.Length > 0)
                 {
                     recieversList = new List<string>();
-                    foreach (string reciever in cfg)
+
+                    int status = -1; // 0 - Recievers; 1 - Folder; 2 - Filename
+                    foreach (string line in cfg)
                     {
-                        recieversList.Add(reciever);
+                        if (line == "Recievers:")
+                            status = 0;
+                        else if (line == "Folder:")
+                            status = 1;
+                        else if (line == "Filename:")
+                            status = 2;
+                        else
+                            switch (status)
+                            {
+                                case 0:
+                                    recieversList.Add(line);
+                                    break;
+                                case 1:
+                                    path = line;
+                                    break;
+                                case 2:
+                                    filename = line;
+                                    break;
+                            }
                     }
                 }
                 else

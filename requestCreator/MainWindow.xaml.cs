@@ -66,11 +66,6 @@ namespace requestCreator
             {
                 vm.Group = Properties.Settings.Default.Group;
             }
-
-            if (Properties.Settings.Default.Path != null && Properties.Settings.Default.Path != String.Empty)
-            {
-                vm.SavePath = Properties.Settings.Default.Path;
-            }
         }
 
         private void LoadConfigData()
@@ -94,21 +89,21 @@ namespace requestCreator
 
         // Dialogs part
 
-        private void BtnFolder_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog folderBrowser = new OpenFileDialog
-            {
-                ValidateNames = false,
-                CheckFileExists = false,
-                CheckPathExists = true,
-                FileName = "Выбор папки"
-            };
-            if (folderBrowser.ShowDialog() == true)
-            {
-                string pth = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
-                vm.SavePath = pth;
-            }
-        }
+        //private void BtnFolder_Click(object sender, RoutedEventArgs e)
+        //{
+        //    OpenFileDialog folderBrowser = new OpenFileDialog
+        //    {
+        //        ValidateNames = false,
+        //        CheckFileExists = false,
+        //        CheckPathExists = true,
+        //        FileName = "Выбор папки"
+        //    };
+        //    if (folderBrowser.ShowDialog() == true)
+        //    {
+        //        string pth = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
+        //        vm.SavePath = pth;
+        //    }
+        //}
 
         private void BtnTasks_Click(object sender, RoutedEventArgs e)
         {
