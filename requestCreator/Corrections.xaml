@@ -9,81 +9,16 @@
         >
     <Grid x:Name="CorGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="№ п/п" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Место возникновения" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Label Content="Причина возникновения" Grid.Column="2" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Зависящие от внутренних факторов" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Зависящие от внешних факторов" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Собственные ошибки ПГ</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Неверные исходные данные от смежников и ГРП</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Новая инициатива заказчика после получения ПСД</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Новая инициатива подрядчика после получения ПСД</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Неверные исходные данные от внешних субподрядчиков</TextBlock>
-
-        <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Инженерные расчеты</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Конструктивно-технологическое решение</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Ведомости объемов работ</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Сметная документация</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Оформление ПСД (нормоконтроль)</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Корректировка</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">Выпуск документации для заказчика</TextBlock>
-
-        <CheckBox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="4" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="5" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="5" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="6" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="6" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="7" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="7" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="8" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="8" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="8" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="8" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-        <CheckBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-
-        <Button x:Name="OkBtn" Margin="10,6" Grid.Row="10" Grid.Column="5" Content="OK" Click="OkBtn_Click"/>
-        <Button x:Name="CancelBtn" Margin="10,6" Grid.Row="10" Grid.Column="6" Content="Отмена" Click="CancelBtn_Click"/>
+        <Button x:Name="OkBtn" Margin="10,6" Content="OK" Click="OkBtn_Click" MaxHeight="30" MaxWidth="100"/>
+        <Button x:Name="CancelBtn" Margin="10,6" Content="Отмена" Click="CancelBtn_Click" MaxHeight="30" MaxWidth="100"/>
 
     </Grid>
 </Window>

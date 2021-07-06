@@ -16,18 +16,9 @@ limitations under the License.
 
 */
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace requestCreator
 {
@@ -36,11 +27,72 @@ namespace requestCreator
     /// </summary>
     public partial class CorrectionsWindow : Window
     {
+        /// <summary>
+        /// Build window gui with checkbox table
+        /// </summary>
         public CorrectionsWindow()
         {
             InitializeComponent();
-        }
 
+            var grid = CorGrid;
+            var cors = Variables.Instance.Corrections;
+
+            int colN = cors.Max(kv => kv.Value.Count);
+            for (int k = 1; k < colN; ++k)
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            var columns = cors.First().Value.Values;
+            AddHeader(columns, 0);
+            
+            // Add rows with label and checkboxes
+            int row = 1;
+            foreach (var cor in cors)
+            {
+                grid.RowDefinitions.Add(new RowDefinition());
+
+                // Add row with column names if needed
+                if (!cor.Value.Values.SequenceEqual(columns))
+                {
+                    columns = cor.Value.Values;
+                    AddHeader(columns, row);
+                    grid.RowDefinitions.Add(new RowDefinition());
+                    row++;
+                }
+                
+                // Add label to 0th column
+                TextBlock cor_name_y = new TextBlock();
+                cor_name_y.Margin = new Thickness(5);
+                cor_name_y.TextWrapping = TextWrapping.Wrap;
+                cor_name_y.Text = cor.Key.Item2;
+                cor_name_y.HorizontalAlignment = HorizontalAlignment.Left;
+                cor_name_y.VerticalAlignment = VerticalAlignment.Center;
+                Grid.SetColumn(cor_name_y, 0);
+                Grid.SetRow(cor_name_y, row);
+                grid.Children.Add(cor_name_y);
+
+                // Add checkboxes for each correction entry
+                for (int col = 1; col < columns.Count + 1; col++)
+                {
+                    CheckBox chbx = new CheckBox();
+                    chbx.HorizontalAlignment = HorizontalAlignment.Center;
+                    chbx.VerticalAlignment = VerticalAlignment.Center;
+                    chbx.ToolTip = cor.Key.Item1.ToString() + '-' + col;
+                    Grid.SetColumn(chbx, col);
+                    Grid.SetRow(chbx, row);
+                    grid.Children.Add(chbx);
+                }
+                row++;
+            }
+            int rc = grid.RowDefinitions.Count;
+            int cc = grid.ColumnDefinitions.Count;
+            Grid.SetColumn(OkBtn, cc - 2);
+            Grid.SetRow(OkBtn, rc - 1);
+            Grid.SetColumn(CancelBtn, cc - 1);
+            Grid.SetRow(CancelBtn, rc - 1);
+        }
+        /// <summary>
+        /// Cycle through all checkboxes and add tooltip from checked
+        /// </summary>
         public string Corrections
         {
             get
@@ -55,36 +107,19 @@ namespace requestCreator
                         {
                             int rowIndex = System.Windows.Controls.Grid.GetRow(c as UIElement);
                             int columnIndex = System.Windows.Controls.Grid.GetColumn(c as UIElement);
-                            if (rowIndex == 9)
+                            
+                            if (st == "")
                             {
-                                if (st == "")
-                                {
-                                    st += (rowIndex - 2);
-                                }
-                                else
-                                {
-                                    st += "," + (rowIndex - 2);
-                                }
+                                st += chkCast.ToolTip;
                             }
                             else
                             {
-                                if (st == "")
-                                {
-                                    st += (rowIndex - 2) + "-" + (columnIndex - 1);
-                                }
-                                else
-                                {
-                                    st += "," + (rowIndex - 2) + "-" + (columnIndex - 1);
-                                }
+                                st += "," + chkCast.ToolTip;
                             }
                         }
                     }
                 }
                 return st;
-            }
-            set
-            {
-
             }
         }
 
@@ -96,6 +131,24 @@ namespace requestCreator
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void AddHeader(System.Collections.Generic.Dictionary<int, string>.ValueCollection columns, int row)
+        {
+            int tmpj = 1;
+            foreach (var c in columns)
+            {
+                TextBlock cor_name_x = new TextBlock();
+                cor_name_x.Margin = new Thickness(5);
+                cor_name_x.TextWrapping = TextWrapping.Wrap;
+                cor_name_x.Text = c;
+                cor_name_x.HorizontalAlignment = HorizontalAlignment.Center;
+                cor_name_x.VerticalAlignment = VerticalAlignment.Center;
+                Grid.SetColumn(cor_name_x, tmpj);
+                Grid.SetRow(cor_name_x, row);
+                CorGrid.Children.Add(cor_name_x);
+                tmpj++;
+            }
         }
     }
 }

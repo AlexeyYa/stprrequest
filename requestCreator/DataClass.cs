@@ -395,13 +395,18 @@ namespace requestCreator
                                 List<string> attachmentFileNames = new List<string>();
                                 
                                 attachmentFileNames.AddRange(DocxModule.GetFilenames());
-                                    //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
-                                    //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
-                                    //    SavePath + d.DocCode + @".docx", "test attachment", "body");
-                                
+                                //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
+                                //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
+                                //    SavePath + d.DocCode + @".docx", "test attachment", "body");
+
+                                string subj = Data.Count == 1 ? "Заявка " + Data.First().DocCode :
+                                    "Заявки на " + Data.Count + " томов по объекту " + Object;
+                                string body = Comments + '\n' + Data.Aggregate("", (result, x) => result += x.DocCode + '\n');
+
+
                                 Exchange.Emailer.SendEmail(Properties.Settings.Default.Sender,
                                     RecieversList,
-                                    "subj", "body", attachmentFileNames);
+                                    subj, body, attachmentFileNames);
                                 DocxModule.GetFilenames().Clear();
                                 MessageBox.Show("Заявка отправлена", "Успешно", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                             }

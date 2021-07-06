@@ -32,6 +32,7 @@ namespace requestCreator
         const string pathGroups = @".\cfg\groups.txt";
         const string pathSubs = @".\cfg\subs.txt";
         const string pathPublishTypes = @".\cfg\publishtype.txt";
+        const string pathCorrections = @".\cfg\corrections.txt";
 
         private static Variables instance;
         public static Variables Instance
@@ -51,6 +52,8 @@ namespace requestCreator
             subs = new List<string>(),
             publishTypes = new List<string>(),
             recieversList = new List<string>();
+
+        private Dictionary<Tuple<int, string>, Dictionary<int, string>> corrections = new Dictionary<Tuple<int, string>, Dictionary<int, string>>();
 
         private string path, filename;
         public List<string> RecieversList
@@ -89,6 +92,13 @@ namespace requestCreator
                 return publishTypes;
             }
         }
+        public Dictionary<Tuple<int, string>, Dictionary<int, string>> Corrections
+        {
+            get
+            {
+                return corrections;
+            }
+        }
         public string Path
         {
             get
@@ -110,6 +120,7 @@ namespace requestCreator
             LoadGroups();
             LoadSubs();
             LoadPublishTypes();
+            LoadCorrections();
             LoadConfig();
         }
 
@@ -143,6 +154,30 @@ namespace requestCreator
             foreach (string pub in publishArray)
             {
                 publishTypes.Add(pub);
+            }
+        }
+        private void LoadCorrections()
+        {
+            Tuple<int, string> tup = new Tuple<int, string>(0, "ERROR");
+
+            string[] corrFile = File.ReadAllLines(pathCorrections);
+            foreach (string line in corrFile)
+            {
+                if (line != null && line != "")
+                {
+                    if (line[0] != '-')
+                    {
+                        int idx = line.IndexOf('#');
+                        tup = new Tuple<int, string>(Int32.Parse(line.Substring(0, idx)), line.Substring(idx + 1));
+                        corrections[tup] = new Dictionary<int, string>();
+                    }
+                    else
+                    {
+                        int idx = line.IndexOf('#');
+                        int cor_id = Int32.Parse(line.Substring(1, idx - 1));
+                        corrections[tup][cor_id] = line.Substring(idx + 1);
+                    }
+                }
             }
         }
         public void LoadConfig()
