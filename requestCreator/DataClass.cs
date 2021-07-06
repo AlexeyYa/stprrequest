@@ -393,13 +393,12 @@ namespace requestCreator
                                 if (Recievers != "" && Recievers != null)
                                     RecieversList.AddRange(Recievers.Split(';'));
                                 List<string> attachmentFileNames = new List<string>();
-                                foreach (var d in data)
-                                {
-                                    attachmentFileNames.AddRange(DocxModule.GetFilenames());
+                                
+                                attachmentFileNames.AddRange(DocxModule.GetFilenames());
                                     //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
                                     //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
                                     //    SavePath + d.DocCode + @".docx", "test attachment", "body");
-                                }
+                                
                                 Exchange.Emailer.SendEmail(Properties.Settings.Default.Sender,
                                     RecieversList,
                                     "subj", "body", attachmentFileNames);
