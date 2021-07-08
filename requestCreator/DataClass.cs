@@ -185,6 +185,8 @@ namespace requestCreator
                     else
                         SubsCh = false;
 
+                    UpdateCorrections();
+
                     subs = value;
                     OnPropertyChanged("Subs");
                 }
@@ -229,6 +231,8 @@ namespace requestCreator
                     else
                         PublishCh = false;
 
+                    UpdateCorrections();
+
                     publishType = value;
                     OnPropertyChanged("PublishType");
                 }
@@ -260,6 +264,7 @@ namespace requestCreator
             {
                 if (corrections != value)
                 {
+                    UpdateCorrections();
                     corrections = value;
                     OnPropertyChanged("Corrections");
                 }
@@ -593,6 +598,13 @@ namespace requestCreator
                                Phone != null && Phone != "";
             bool emptyCh = Data.Count != 0;
 
+            UpdateCorrections();
+
+            return settingsCh && emptyCh && ObjectCh && SubsCh && TasksCh && PublishCh && CorrectCh;
+        }
+
+        private void UpdateCorrections()
+        {
             var vtor_v = (PublishType == Variables.Instance.PublishTypes[1]);
             var cor = (Corrections != null && Corrections != "");
             var sub = (Subs != Variables.Instance.Subs[0]);
@@ -603,8 +615,6 @@ namespace requestCreator
 
             foreach (var d in Data)
                 d.UpdateCor(cor);
-
-            return settingsCh && emptyCh && objectCh && subsCh && tasksCh && publishCh && correctCh;
         }
     }
 
