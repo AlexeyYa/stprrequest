@@ -32,6 +32,7 @@ namespace requestCreator
         const string pathGroups = @".\cfg\groups.txt";
         const string pathSubs = @".\cfg\subs.txt";
         const string pathPublishTypes = @".\cfg\publishtype.txt";
+        const string pathCorrections = @".\cfg\corrections.txt";
 
         private static Variables instance;
         public static Variables Instance
@@ -52,6 +53,9 @@ namespace requestCreator
             publishTypes = new List<string>(),
             recieversList = new List<string>();
 
+        private Dictionary<Tuple<int, string>, Dictionary<int, string>> corrections = new Dictionary<Tuple<int, string>, Dictionary<int, string>>();
+
+        private string path, filename;
         public List<string> RecieversList
         {
             get
@@ -88,6 +92,27 @@ namespace requestCreator
                 return publishTypes;
             }
         }
+        public Dictionary<Tuple<int, string>, Dictionary<int, string>> Corrections
+        {
+            get
+            {
+                return corrections;
+            }
+        }
+        public string Path
+        {
+            get
+            {
+                return path;
+            }
+        }
+        public string Filename
+        {
+            get
+            {
+                return filename;
+            }
+        }
 
         public Variables()
         {
@@ -95,6 +120,7 @@ namespace requestCreator
             LoadGroups();
             LoadSubs();
             LoadPublishTypes();
+            LoadCorrections();
             LoadConfig();
         }
 
@@ -130,6 +156,30 @@ namespace requestCreator
                 publishTypes.Add(pub);
             }
         }
+        private void LoadCorrections()
+        {
+            Tuple<int, string> tup = new Tuple<int, string>(0, "ERROR");
+
+            string[] corrFile = File.ReadAllLines(pathCorrections);
+            foreach (string line in corrFile)
+            {
+                if (line != null && line != "")
+                {
+                    if (line[0] != '-')
+                    {
+                        int idx = line.IndexOf('#');
+                        tup = new Tuple<int, string>(Int32.Parse(line.Substring(0, idx)), line.Substring(idx + 1));
+                        corrections[tup] = new Dictionary<int, string>();
+                    }
+                    else
+                    {
+                        int idx = line.IndexOf('#');
+                        int cor_id = Int32.Parse(line.Substring(1, idx - 1));
+                        corrections[tup][cor_id] = line.Substring(idx + 1);
+                    }
+                }
+            }
+        }
         public void LoadConfig()
         {
             try
@@ -139,9 +189,29 @@ namespace requestCreator
                 if (cfg.Length > 0)
                 {
                     recieversList = new List<string>();
-                    foreach (string reciever in cfg)
+
+                    int status = -1; // 0 - Recievers; 1 - Folder; 2 - Filename
+                    foreach (string line in cfg)
                     {
-                        recieversList.Add(reciever);
+                        if (line == "Recievers:")
+                            status = 0;
+                        else if (line == "Folder:")
+                            status = 1;
+                        else if (line == "Filename:")
+                            status = 2;
+                        else
+                            switch (status)
+                            {
+                                case 0:
+                                    recieversList.Add(line);
+                                    break;
+                                case 1:
+                                    path = line;
+                                    break;
+                                case 2:
+                                    filename = line;
+                                    break;
+                            }
                     }
                 }
                 else

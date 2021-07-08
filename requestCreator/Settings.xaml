@@ -47,13 +47,13 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Label Margin="10,5,10,5" Content="Путь по умолчанию" Height="25"
+                        <!--<Label Margin="10,5,10,5" Content="Путь по умолчанию" Height="25"
                                Grid.Column="0" Grid.Row="2"/>
                         <TextBox x:Name="tbPath" Height="25" Margin="10,5,10,5" TextWrapping="Wrap" Text="Path"
                                Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"/>
-                        <!-- Inputs -->
-                        <Button x:Name="btnFolder" Content="Выбор папки для сохранения" Margin="10,5,10,5" Click="BtnFolder_Click" Height="25"
-                               Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>
+                        --><!-- Inputs --><!--
+                        <Button x:Name="btnFolder" Content="Выбор папки для сохраненbия" Margin="10,5,10,5" Click="BtnFolder_Click" Height="25"
+                               Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>-->
 
 
                       <Label Margin="10,5,10,5" Content="Адрес отправителя" Height="25"

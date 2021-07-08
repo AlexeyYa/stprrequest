@@ -14,9 +14,6 @@
     <Setting Name="Phone" Type="System.String" Scope="User">
       <Value Profile="(Default)">Телефон</Value>
     </Setting>
-    <Setting Name="Path" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Выберите папку для сохранения</Value>
-    </Setting>
     <Setting Name="ConfigPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\\cfg\\cfg.txt</Value>
     </Setting>

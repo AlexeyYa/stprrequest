@@ -185,6 +185,8 @@ namespace requestCreator
                     else
                         SubsCh = false;
 
+                    UpdateCorrections();
+
                     subs = value;
                     OnPropertyChanged("Subs");
                 }
@@ -229,6 +231,8 @@ namespace requestCreator
                     else
                         PublishCh = false;
 
+                    UpdateCorrections();
+
                     publishType = value;
                     OnPropertyChanged("PublishType");
                 }
@@ -260,6 +264,7 @@ namespace requestCreator
             {
                 if (corrections != value)
                 {
+                    UpdateCorrections();
                     corrections = value;
                     OnPropertyChanged("Corrections");
                 }
@@ -315,23 +320,6 @@ namespace requestCreator
                 {
                     data = value;
                     OnPropertyChanged("Data");
-                }
-            }
-        }
-
-        private string savePath;
-        public string SavePath
-        {
-            get { return savePath; }
-            set
-            {
-                if (savePath != value)
-                {
-                    if (value[value.Length - 1] != '\\'){
-                        value += '\\';
-                    }
-                    savePath = value;
-                    OnPropertyChanged("SavePath");
                 }
             }
         }
@@ -398,7 +386,7 @@ namespace requestCreator
                             data.Add(new_data);
                         }
 
-                        if (!DocxModule.Create(this, SavePath))
+                        if (!DocxModule.Create(this, Variables.Instance.Path))
                         {
                             MessageBoxResult messageBox = MessageBox.Show("Не удалось создать файл", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
@@ -410,16 +398,21 @@ namespace requestCreator
                                 if (Recievers != "" && Recievers != null)
                                     RecieversList.AddRange(Recievers.Split(';'));
                                 List<string> attachmentFileNames = new List<string>();
-                                foreach (var d in data)
-                                {
-                                    attachmentFileNames.Add(SavePath + d.DocCode + @".docx");
-                                    //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
-                                    //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
-                                    //    SavePath + d.DocCode + @".docx", "test attachment", "body");
-                                }
+                                
+                                attachmentFileNames.AddRange(DocxModule.GetFilenames());
+                                //email_send(Properties.Settings.Default.Server, Properties.Settings.Default.Reciever,
+                                //    Properties.Settings.Default.Mail, Properties.Settings.Default.Pass,
+                                //    SavePath + d.DocCode + @".docx", "test attachment", "body");
+
+                                string subj = Data.Count == 1 ? "Заявка " + Data.First().DocCode :
+                                    "Заявки на " + Data.Count + " томов по объекту " + Object;
+                                string body = Comments + '\n' + Data.Aggregate("", (result, x) => result += x.DocCode + '\n');
+
+
                                 Exchange.Emailer.SendEmail(Properties.Settings.Default.Sender,
                                     RecieversList,
-                                    "subj", "body", attachmentFileNames);
+                                    subj, body, attachmentFileNames);
+                                DocxModule.GetFilenames().Clear();
                                 MessageBox.Show("Заявка отправлена", "Успешно", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                             }
                             catch (Exception e) {
@@ -602,10 +595,16 @@ namespace requestCreator
         {
             bool settingsCh = User != null && User != "" && // Simple checks
                                Group != null && Group != "" &&
-                               Phone != null && Phone != "" &&
-                               SavePath != null && SavePath != "";
+                               Phone != null && Phone != "";
             bool emptyCh = Data.Count != 0;
 
+            UpdateCorrections();
+
+            return settingsCh && emptyCh && ObjectCh && SubsCh && TasksCh && PublishCh && CorrectCh;
+        }
+
+        private void UpdateCorrections()
+        {
             var vtor_v = (PublishType == Variables.Instance.PublishTypes[1]);
             var cor = (Corrections != null && Corrections != "");
             var sub = (Subs != Variables.Instance.Subs[0]);
@@ -616,8 +615,6 @@ namespace requestCreator
 
             foreach (var d in Data)
                 d.UpdateCor(cor);
-
-            return settingsCh && emptyCh && objectCh && subsCh && tasksCh && publishCh && correctCh;
         }
     }
 
