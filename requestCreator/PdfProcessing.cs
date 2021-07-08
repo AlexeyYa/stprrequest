@@ -135,6 +135,15 @@ namespace requestCreator
             A1 = A1_;
             A0 = A0_;
         }
+        public PdfFormat(PdfFormat src)
+        {
+            Formats = src.Formats;
+            A4 = src.A4;
+            A3 = src.A3;
+            A2 = src.A2;
+            A1 = src.A1;
+            A0 = src.A0;
+        }
 
         public static PdfFormat operator+ (PdfFormat p1, PdfFormat p2)
         {

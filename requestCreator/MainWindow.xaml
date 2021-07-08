@@ -66,8 +66,8 @@
 
                                 <TextBox Text="{Binding Path=Size,Converter={StaticResource PdfFormatConverter},
                                     UpdateSourceTrigger=LostFocus}"/>
-                                <Button Click="ClearSize" Grid.Column="1">-</Button>
-                                <Button Click="EditSize" Grid.Column="2">+</Button>
+                                <Button Click="ClearSize" Grid.Column="1" ToolTip="Сбросить">C</Button>
+                                <Button Click="EditSize" Grid.Column="2" ToolTip="Добавить файл">+</Button>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -80,23 +80,24 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-
+                                <Button Click="CopySizeCor" Grid.Column="0" ToolTip="Скопировать из форматов">=></Button>
                                 <TextBox Text="{Binding Path=SizeCor,Converter={StaticResource PdfFormatConverter}, UpdateSourceTrigger=LostFocus}"
-                                         Style="{Binding Path=CorrectCh, Converter={StaticResource BoolToStyleConverter}}"/>
-                                <Button Click="ClearSizeCor" Grid.Column="1">-</Button>
-                                <Button Click="EditSizeCor" Grid.Column="2">+</Button>
+                                         Grid.Column="1" Style="{Binding Path=CorrectCh, Converter={StaticResource BoolToStyleConverter}}"/>
+                                <Button Click="ClearSizeCor" Grid.Column="2" ToolTip="Сбросить">C</Button>
+                                <Button Click="EditSizeCor" Grid.Column="3" ToolTip="Добавить файл">+</Button>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Кнопк">
+                <!--<DataGridTemplateColumn Header="Кнопк">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Click="ShowHideDetails" Grid.Column="1">+</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>

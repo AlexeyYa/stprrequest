@@ -192,6 +192,11 @@ namespace requestCreator
             DataClass d = ((FrameworkElement)sender).DataContext as DataClass;
             d.SizeCor = new PdfFormat();
         }
+        private void CopySizeCor(object sender, RoutedEventArgs e)
+        {
+            DataClass d = ((FrameworkElement)sender).DataContext as DataClass;
+            d.SizeCor = new PdfFormat(d.Size);
+        }
 
         private void ShowHideDetails(object sender, RoutedEventArgs e)
         {
